@@ -2,7 +2,7 @@
   <div id="app" class="d-flex flex-column">
     <Navbar />
     <div class="container py-5 flex-grow-1">
-      <router-view />
+      <routerView />
     </div>
     <Footer />
   </div>

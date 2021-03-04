@@ -23,12 +23,12 @@
             >
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/dashboard/profile"
+            <router-link class="nav-link" to="/dashboard/my-profile"
               >Profile</router-link
             >
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/dashboard/posts"
+            <router-link class="nav-link" to="/dashboard/my-posts"
               >My Posts</router-link
             >
           </li>
