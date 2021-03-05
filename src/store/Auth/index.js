@@ -48,13 +48,21 @@ const actions = {
     router.push("/dashboard");
   },
 
-  async getAuthUser({ commit }) {
-    let {
-      data: { authUserProfile },
-    } = await apolloClient.query({
-      query: AUTHENTICATED_USER,
-    });
-    commit("LOGIN_USER", { user: authUserProfile });
+  async getAuthUser({ commit, dispatch }) {
+    try {
+      let {
+        data: { authUserProfile },
+      } = await apolloClient.query({
+        query: AUTHENTICATED_USER,
+      });
+      commit("LOGIN_USER", { user: authUserProfile });
+    } catch (err) {
+      dispatch("logoutUser");
+    }
+  },
+  logoutUser({ commit }) {
+    commit("LOGOUT_USER");
+    localStorage.removeItem("apollo-token");
   },
 };
 
@@ -65,6 +73,11 @@ const mutations = {
   },
   SET_TOKEN(state, payload) {
     state.token = payload.token;
+  },
+  LOGOUT_USER(state) {
+    state.user = {};
+    state.authStatus = false;
+    state.token = null;
   },
 };
 
