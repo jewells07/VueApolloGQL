@@ -7,18 +7,20 @@
         By {{ post.author.firstName }} {{ post.author.lastName }}
       </p>
       <p class="card-text">Published On {{ post.createdAt | dateTime }}</p>
+      <button
+        class="btn btn-primary mr-2"
+        @click="$router.push(`/post/${post.id}`)"
+      >
+        Read More
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-  import moment from "moment";
+  import DateTimeMixins from "@/mixins/DateFilters";
   export default {
-    filters: {
-      dateTime(val) {
-        return moment(new Date(parseInt(val))).format("LL");
-      },
-    },
+    mixins: [DateTimeMixins],
     props: {
       post: {
         type: Object,

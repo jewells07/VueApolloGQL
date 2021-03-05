@@ -29,45 +29,41 @@
 </template>
 
 <script>
+  import Scroller from "@/mixins/Scroller";
   import Posts from "@/components/Posts/Posts";
   export default {
     components: {
       Posts,
     },
-    watch: {
-      currentPage() {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-      },
-    },
+    mixins: [Scroller],
     name: "Home",
     data: () => ({
       currentPage: 1,
       feedsQuery: `
-    query GetPaginatedPosts($page: Int!, $limit: Int!) {
-            getPostsByLimitAndPage(page: $page, limit: $limit) {
-              posts {
-                id
-                title
-                featuredImage
-                createdAt
-                updatedAt
-                author {
-                  id
-                  username
-                  firstName
-                  lastName
-                  avatarImage
+        query GetPaginatedPosts($page: Int!, $limit: Int!) {
+                getPostsByLimitAndPage(page: $page, limit: $limit) {
+                  posts {
+                    id
+                    title
+                    featuredImage
+                    createdAt
+                    updatedAt
+                    author {
+                      id
+                      username
+                      firstName
+                      lastName
+                      avatarImage
+                    }
+                  }
+                  paginator {
+                    currentPage
+                    postCount
+                    perPage
+                  }
                 }
               }
-              paginator {
-                currentPage
-                postCount
-                perPage
-              }
-            }
-          }
-    `,
+        `,
     }),
   };
 </script>

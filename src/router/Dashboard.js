@@ -13,7 +13,7 @@ export default {
     {
       path: "my-posts",
       name: "MyPosts",
-      component: () => import("@/views/Dashboard/Posts.vue"),
+      component: () => import("@/views/Dashboard/UserPosts.vue"),
     },
     {
       path: "my-profile",
