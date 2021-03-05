@@ -5,6 +5,9 @@ export default {
   path: "/dashboard",
   name: "Dashboard",
   component: DashboardView,
+  meta: {
+    requiresAuth: true,
+  },
   redirect: "/dashboard/my-posts",
   children: [
     {

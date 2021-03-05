@@ -4,6 +4,9 @@ export default {
   path: "/auth",
   name: "Authentication",
   component: AuthView,
+  meta: {
+    requiresGuest: true,
+  },
   redirect: "/auth/login",
   children: [
     {
