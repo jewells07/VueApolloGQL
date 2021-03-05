@@ -28,3 +28,29 @@ export const AUTHENTICATE_USER = gql`
     }
   }
 `;
+
+export const GET_PAGINATED_POSTS = gql`
+  query GET_PAGINATED_POSTS($page: Int!, $limit: Int!) {
+    getPostsByLimitAndPage(limit: $limit, page: $page) {
+      posts {
+        id
+        title
+        author {
+          username
+          firstName
+          lastName
+        }
+      }
+      paginator {
+        slNo
+        prev
+        next
+        perPage
+        postCount
+        currentPage
+        hasPrevPage
+        hasNextPage
+      }
+    }
+  }
+`;
