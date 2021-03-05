@@ -62,7 +62,10 @@ const actions = {
   },
   logoutUser({ commit }) {
     commit("LOGOUT_USER");
+<<<<<<< HEAD
     localStorage.removeItem("apollo-token");
+=======
+>>>>>>> db5dff3b1909840601ca68a6db674191867c5f24
   },
 };
 
