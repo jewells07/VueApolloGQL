@@ -95,6 +95,7 @@
 </template>
 
 <script>
+  import { mapActions } from "vuex";
   export default {
     data: () => ({
       user: {
@@ -106,8 +107,12 @@
       },
     }),
     methods: {
+      ...mapActions({
+        registerUser: "Auth/registerUser",
+      }),
       signUpUser() {
         console.log("User", this.user);
+        this.registerUser(this.user);
       },
     },
   };

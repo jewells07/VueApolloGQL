@@ -17,5 +17,8 @@
       Navbar,
       Footer,
     },
+    async created() {
+      await this.$store.dispatch("Auth/getAuthUser");
+    },
   };
 </script>
