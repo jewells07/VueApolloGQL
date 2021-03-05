@@ -20,23 +20,35 @@ const getters = {
 
 const actions = {
   async loginUser({ dispatch }, userData) {
-    let {
-      data: { authenticateUser },
-    } = await apolloClient.query({
-      query: AUTHENTICATE_USER,
-      variables: userData,
-    });
-    dispatch("setAuthUserData", authenticateUser);
+    try {
+      let {
+        data: { authenticateUser },
+      } = await apolloClient.query({
+        query: AUTHENTICATE_USER,
+        variables: userData,
+      });
+      dispatch("setAuthUserData", authenticateUser);
+    } catch (err) {
+      // eslint-disable-next-line
+      Toast.fire({
+        icon: "error",
+        title: err.message.split(": ")[1],
+      });
+    }
   },
 
   async registerUser({ dispatch }, userData) {
-    let {
-      data: { registerUser },
-    } = await apolloClient.mutate({
-      mutation: REGISTER_USER,
-      variables: userData,
-    });
-    dispatch("setAuthUserData", registerUser);
+    try {
+      let {
+        data: { registerUser },
+      } = await apolloClient.mutate({
+        mutation: REGISTER_USER,
+        variables: userData,
+      });
+      dispatch("setAuthUserData", registerUser);
+    } catch (err) {
+      console.log(err.message.split(": ")[1]);
+    }
   },
 
   async setAuthUserData({ commit }, payload) {
@@ -46,6 +58,12 @@ const actions = {
     localStorage.setItem("apollo-token", payload.token.split(" ")[1]);
     // Redirect the user to the Dashboard
     router.push("/dashboard");
+
+    // eslint-disable-next-line
+    Toast.fire({
+      icon: "success",
+      title: "You are now Logged In",
+    });
   },
 
   async getAuthUser({ commit, dispatch }) {
@@ -60,7 +78,14 @@ const actions = {
       dispatch("logoutUser");
     }
   },
-  logoutUser({ commit }) {
+  logoutUser({ commit, state }) {
+    if (state.token) {
+      // eslint-disable-next-line
+      Toast.fire({
+        icon: "success",
+        title: "You are now Logged Out",
+      });
+    }
     commit("LOGOUT_USER");
     localStorage.removeItem("apollo-token");
   },
