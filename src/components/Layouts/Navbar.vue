@@ -9,7 +9,7 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Home {{ isAuth }}</router-link>
+            <router-link class="nav-link" to="/">Home</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/about">About</router-link>

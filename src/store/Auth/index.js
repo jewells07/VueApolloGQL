@@ -1,4 +1,8 @@
-import { REGISTER_USER, AUTHENTICATED_USER } from "../../gql";
+import {
+  REGISTER_USER,
+  AUTHENTICATED_USER,
+  AUTHENTICATE_USER,
+} from "../../gql";
 import { apolloClient } from "../../vue-apollo";
 import router from "../../router";
 
@@ -15,26 +19,35 @@ const getters = {
 };
 
 const actions = {
-  async registerUser(
-    {
-      // eslint-disable-next-line
-      commit,
-    },
-    userData
-  ) {
+  async loginUser({ dispatch }, userData) {
+    let {
+      data: { authenticateUser },
+    } = await apolloClient.query({
+      query: AUTHENTICATE_USER,
+      variables: userData,
+    });
+    dispatch("setAuthUserData", authenticateUser);
+  },
+
+  async registerUser({ dispatch }, userData) {
     let {
       data: { registerUser },
     } = await apolloClient.mutate({
       mutation: REGISTER_USER,
       variables: userData,
     });
-    commit("LOGIN_USER", registerUser);
-    commit("SET_TOKEN", registerUser);
+    dispatch("setAuthUserData", registerUser);
+  },
+
+  async setAuthUserData({ commit }, payload) {
+    commit("LOGIN_USER", payload);
+    commit("SET_TOKEN", payload);
     //Set token in localstorage
-    localStorage.setItem("apollo-token", registerUser.token.split(" ")[1]);
+    localStorage.setItem("apollo-token", payload.token.split(" ")[1]);
     // Redirect the user to the Dashboard
     router.push("/dashboard");
   },
+
   async getAuthUser({ commit }) {
     let {
       data: { authUserProfile },

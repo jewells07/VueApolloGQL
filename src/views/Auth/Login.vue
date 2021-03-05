@@ -53,6 +53,7 @@
 </template>
 
 <script>
+  import { mapActions } from "vuex";
   export default {
     data: () => ({
       user: {
@@ -61,8 +62,11 @@
       },
     }),
     methods: {
-      authenticateUser() {
-        console.log("User", this.user);
+      ...mapActions({
+        loginUser: "Auth/loginUser",
+      }),
+      async authenticateUser() {
+        await this.loginUser(this.user);
       },
     },
   };

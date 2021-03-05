@@ -12,3 +12,19 @@ export const AUTHENTICATED_USER = gql`
     }
   }
 `;
+
+export const AUTHENTICATE_USER = gql`
+  query AUTHENTICATE_USER($username: String!, $password: String!) {
+    authenticateUser(username: $username, password: $password) {
+      user {
+        id
+        username
+        avatarImage
+        email
+        lastName
+        firstName
+      }
+      token
+    }
+  }
+`;
