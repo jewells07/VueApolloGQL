@@ -20,11 +20,14 @@
       </button>
     </td>
     <td><button class="btn btn-info mr-2 btn-sm">Edit</button></td>
-    <td><button class="btn btn-danger btn-sm">Delete</button></td>
+    <td>
+      <button class="btn btn-danger btn-sm" @click="deletePost">Delete</button>
+    </td>
   </tr>
 </template>
 
 <script>
+  import gql from "graphql-tag";
   import DateTimeMixins from "@/mixins/DateFilters";
   export default {
     mixins: [DateTimeMixins],
@@ -36,6 +39,27 @@
       posts: {
         type: Object,
         required: true,
+      },
+    },
+    data: () => ({
+      deleteMutation: `mutation DeletePost($id: ID){
+          deletePostById(id: $id){
+            message
+            success
+          }
+        }`,
+    }),
+    methods: {
+      async deletePost() {
+        let { data } = await this.$apollo.mutate({
+          mutation: gql`
+            ${this.deleteMutation}
+          `,
+          variable: { id: this.post.id },
+        });
+
+        // eslint-disable-next-line
+        Toast.fire({ icon: "success", title: data.deletePostById.message });
       },
     },
   };

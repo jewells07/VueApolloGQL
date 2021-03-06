@@ -28,9 +28,12 @@
                     <h2 class="card-title text-primary">
                       {{ data.getPostById.title }}
                     </h2>
-                    <p class="card-text">
-                      {{ data.getPostById.content }}
-                    </p>
+                    <div class="post-content">
+                      <p
+                        class="card-text"
+                        v-html="data.getPostById.content"
+                      ></p>
+                    </div>
                     <p class="card-text">
                       <small class="text-muted">
                         Last updated on
@@ -85,3 +88,9 @@
     }),
   };
 </script>
+
+<style lang="scss" scoped>
+  .post-content {
+    overflow: auto !important;
+  }
+</style>

@@ -21,6 +21,11 @@ export default {
       component: () => import("@/views/Dashboard/Profile.vue"),
     },
     {
+      path: "add-post",
+      name: "AddPost",
+      component: () => import("@/views/Dashboard/AddPost.vue"),
+    },
+    {
       path: "logout",
       name: "Logout",
       beforeEnter: (to, from, next) => {

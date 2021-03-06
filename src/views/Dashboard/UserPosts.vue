@@ -4,7 +4,17 @@
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <h2 class="card-title text-primary">My Posts</h2>
+            <div class="d-flex justify-content-between align-items-center">
+              <h2 class="card-title text-primary align-self-center">
+                My Posts
+              </h2>
+              <button
+                class="btn btn-primary align-self-center"
+                @click="$router.push('/dashboard/add-post')"
+              >
+                Add Post
+              </button>
+            </div>
             <ApolloQuery
               :query="
                 (gql) =>
