@@ -19,7 +19,14 @@
         View
       </button>
     </td>
-    <td><button class="btn btn-info mr-2 btn-sm">Edit</button></td>
+    <td>
+      <button
+        class="btn btn-info mr-2 btn-sm"
+        @click="$router.push(`/dashboard/add-post?edit=${post.id}`)"
+      >
+        Edit
+      </button>
+    </td>
     <td>
       <button class="btn btn-danger btn-sm" @click="deletePost">Delete</button>
     </td>
@@ -42,12 +49,14 @@
       },
     },
     data: () => ({
-      deleteMutation: `mutation DeletePost($id: ID){
+      deleteMutation: `
+      mutation DeletePost($id: ID!){
           deletePostById(id: $id){
             message
             success
           }
-        }`,
+        }
+        `,
     }),
     methods: {
       async deletePost() {
@@ -55,11 +64,12 @@
           mutation: gql`
             ${this.deleteMutation}
           `,
-          variable: { id: this.post.id },
+          variables: { id: this.post.id },
         });
 
         // eslint-disable-next-line
         Toast.fire({ icon: "success", title: data.deletePostById.message });
+        this.$emit("delete-post");
       },
     },
   };

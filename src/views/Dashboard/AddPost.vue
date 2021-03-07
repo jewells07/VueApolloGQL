@@ -3,7 +3,9 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h3 class="card-title text-primary">Add Post</h3>
+          <h3 class="card-title text-primary">
+            {{ editMode ? "Edit Post" : "Add Post" }}
+          </h3>
           <hr />
           <div class="row">
             <div class="col-md-7">
@@ -28,8 +30,21 @@
                 <input type="hidden" v-model="newPost.featuredImage" />
               </div>
               <div class="form-group">
-                <button class="btn btn-primary" @click="addNewPost">
+                <button
+                  :disabled="isLoading"
+                  v-if="!editMode"
+                  class="btn btn-primary"
+                  @click="addNewPost"
+                >
                   Add Post
+                </button>
+                <button
+                  :disabled="isLoading"
+                  v-else
+                  class="btn btn-primary"
+                  @click="updatePost"
+                >
+                  Update Post
                 </button>
               </div>
             </div>
@@ -64,16 +79,51 @@
     components: {
       VueEditor,
     },
+    computed: {
+      editMode() {
+        return !!this.$route.query.edit;
+      },
+    },
     data: () => ({
       newPost: {
         title: "",
         content: "",
         featuredImage: "",
       },
+      isLoading: false,
+      updatePostMutation: `
+        mutation EditPost(
+          $id: ID!
+          $title: String!
+          $content: String!
+          $featuredImage: String
+          ) {
+            editPostByID(
+              id:$id
+              updatedPost: {
+                title:$title
+                content: $content
+                featuredImage: $featuredImage
+            }
+          ) {
+            id
+          }
+        }
+      `,
+      getPostByIdQuery: `
+      query GetPostById($id:ID!){
+          getPostById(id: $id){
+            title
+            content
+            featuredImage
+          }
+        }
+        `,
       imageMutation: `
         mutation UploadImage($file:Upload!){
         imageUploader(file:$file)
-      }`,
+      }
+      `,
       newPostMutation: `
       mutation NewPost($title:String!, $content:String!, $featuredImage: String){
         createNewPost(newPost:{
@@ -83,7 +133,8 @@
         }){
           id
         }
-      }`,
+      }
+      `,
     }),
     methods: {
       async uploadImage() {
@@ -98,15 +149,55 @@
         this.$refs["imageUploader"] = null;
       },
       async addNewPost() {
+        this.isLoading = true;
+        // eslint-disable-next-line
         let { data } = await this.$apollo.mutate({
           mutation: gql`
             ${this.newPostMutation}
           `,
           variables: this.newPost,
         });
-        console.log("DATA", data);
+        this.isLoading = false;
+        // eslint-disable-next-line
+        Toast.fire({ icon: "success", title: "Post added successfully" });
         this.$router.push("/dashboard/my-posts");
       },
+      async getPost() {
+        this.isLoading = true;
+        let { data } = await this.$apollo.query({
+          query: gql`
+            ${this.getPostByIdQuery}
+          `,
+          variables: {
+            id: this.$route.query.edit,
+          },
+        });
+        this.isLoading = false;
+        this.newPost = data.getPostById;
+      },
+      async updatePost() {
+        this.isLoading = true;
+        // eslint-disable-next-line
+        let { data } = await this.$apollo.mutate({
+          mutation: gql`
+            ${this.updatePostMutation}
+          `,
+          variables: {
+            ...this.newPost,
+            id: this.$route.query.edit,
+          },
+        });
+        this.isLoading = false;
+        // eslint-disable-next-line
+        Toast.fire({ icon: "success", title: "Post updated successfully" });
+        this.$router.push("/dashboard/my-posts");
+      },
+    },
+    created() {
+      if (this.editMode) {
+        // Fetch that post from the backend using GQS
+        this.getPost();
+      }
     },
   };
 </script>

@@ -12,6 +12,7 @@
     <tbody>
       <PostsItem
         v-for="(post, i) in posts"
+        @delete-post="$emit('delete-post')"
         :key="post.id"
         :post="post"
         :sno="i"

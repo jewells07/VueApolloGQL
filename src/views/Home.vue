@@ -15,11 +15,15 @@
         <div v-else-if="data">
           <Posts :posts="data.getPostsByLimitAndPage.posts" />
           <bPagination
+            v-if="data.getPostsByLimitAndPage.posts.length"
             align="center"
             v-model="currentPage"
             :per-page="data.getPostsByLimitAndPage.paginator.perPage"
             :total-rows="data.getPostsByLimitAndPage.paginator.postCount"
           />
+          <div v-else>
+            <p class="text-center">Sorry! there are no post in Database</p>
+          </div>
         </div>
         <div v-else-if="error">Something happend please try again...</div>
         <div v-else>No Result</div>

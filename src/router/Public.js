@@ -11,7 +11,7 @@ export default [
     component: () => import("@/views/About.vue"),
   },
   {
-    path: "/posts/:id",
+    path: "/post/:id",
     name: "Post",
     component: () => import("@/views/Post.vue"),
   },

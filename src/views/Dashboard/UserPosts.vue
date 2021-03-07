@@ -24,11 +24,15 @@
               "
               :variables="{ page: currentPage, limit: 6 }"
             >
-              <template v-slot="{ result: { data, error, loading } }">
+              <template v-slot="{ result: { data, error, loading }, query }">
                 <div v-if="loading">Loading...</div>
                 <div v-else-if="data">
-                  <PostsList :posts="data.getAuthenticatedUsersPosts.posts" />
+                  <PostsList
+                    :posts="data.getAuthenticatedUsersPosts.posts"
+                    @delete-post="query.refetch()"
+                  />
                   <bPagination
+                    v-if="data.getAuthenticatedUsersPosts.posts.length"
                     align="center"
                     v-model="currentPage"
                     :per-page="
@@ -38,6 +42,7 @@
                       data.getAuthenticatedUsersPosts.paginator.postCount
                     "
                   />
+                  <div v-else><p>Sorry! there are no post in Database</p></div>
                 </div>
                 <div v-else-if="error">
                   Something went wrong :-(
