@@ -36,7 +36,7 @@
         type: Number,
         required: true,
       },
-      posts: {
+      post: {
         type: Object,
         required: true,
       },
